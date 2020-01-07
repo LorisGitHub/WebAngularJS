@@ -1,0 +1,205 @@
+/*.jumbotron {
+    /*background-image: url("/image/jumbo.png");
+    background-size: cover;
+    color: whitesmoke;
+}*/
+
+html{
+    height: 100%;
+    /*background-image: url('../image/image_blur_image_blur_amagi.jpg');
+    background-attachment: scroll;
+    background-size: 100% 100%;*/
+}
+
+body{
+    height: 100%;
+}
+
+.LoginScreen{
+    background-image: url('../image/image_blur_image_blur_amagi.jpg');
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.mx-0{
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+#bandeaunotif{
+    font-size: 12px;
+    padding: 10px;
+    font-style: oblique;
+}
+
+#loginForm{
+    background-color: rgba(204, 75, 75, 0.95); 
+    border: 5px outset white;
+    padding-top: 20px;  
+    padding-bottom: 20px;  
+    border-radius: 20px; 
+    font-family: initial;
+}
+
+#Container{
+    width: auto;
+    background-image: url('../image/image_blur_image_blur_amagi.jpg');
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+    min-height: 100vh;
+}
+
+.content{
+    margin: 10px;
+    /*background: rgba(204, 75, 75, 0.95); */
+    background: rgba(255,255,255,0.80);
+    border: 5px outset black;
+    border-radius: 10px;
+}
+
+.lateral-content{
+    margin-top: 10px;
+    background: rgba(64, 64, 64, 0.70); 
+    border: 5px outset black;
+    border-radius: 10px;
+    height: 100%;
+}
+
+a:hover{
+    background-color: rgba(230, 230, 230, 0.5);
+}
+
+.myButton {
+	box-shadow: 3px 4px 0px 0px #899599;
+	background:linear-gradient(to bottom, #ededed 5%, #bab1ba 100%);
+	background-color:#ededed;
+	border-radius:10px;
+	border:1px solid #d6bcd6;
+	display:inline-block;
+	cursor:pointer;
+	font-family:Verdana;
+	font-size:12px;
+	font-weight:bold;
+	padding:10px 25px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #e1e2ed;
+}
+.myButton:hover {
+	background:linear-gradient(to bottom, #bab1ba 5%, #ededed 100%);
+	background-color:#bab1ba;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+}
+
+#FormTitle{
+    text-align: center;
+    font-family: Verdana, Tahoma, sans-serif;
+    font-weight: bold;
+    color: #e1e2ed;
+    text-shadow: 0px 2px 2px black;
+}
+
+#quizzBox:hover{
+    -webkit-box-shadow: 0px 0px 7px rgba(0,0,0,0.9);
+    box-shadow: 0px 0px 7px rgba(0,0,0,0.9);
+}
+
+#quizzBox{
+    position: relative;
+    
+    display: inline-block;
+    overflow: hidden;
+    width: -moz-available;
+    height: 300px;
+    padding: 0px;
+    margin: 30px;
+    border: 5px solid black;
+    background-color: rgb(64, 64, 64);
+    cursor:pointer;
+   
+    -webkit-transition: box-shadow 0.5s ease;
+    -moz-transition: box-shadow 0.5s ease;
+    -o-transition: box-shadow 0.5s ease;
+    -ms-transition: box-shadow 0.5s ease;
+    transition: box-shadow 0.5s ease;
+}
+
+#QuizzImg{
+    width: 100%;
+    height: 70%;
+    /*transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;*/
+    position: absolute;
+    min-width: 100%;
+    display: block;
+    max-height: 70%;
+}
+
+.col-centered{
+    float: none;
+    margin-left: 0 auto;
+}
+
+.col-content{
+    margin: 5px;
+}
+
+.row{
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.itemUsr{
+    display: flex; 
+    padding: 5px;
+    border: none;
+    list-style-type: none; 
+    background-color:azure;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.itemUsr:hover{
+    -webkit-box-shadow: 0px 0px 7px rgba(250,250,0,0.9);
+    box-shadow: 0px 0px 7px rgba(250,250,0,0.9);
+}
+
+.special-row{
+    display: flow-root;
+}
+
+.histoCol{
+    border-right: 1px solid black;
+}
+
+#ProgressBar{
+    width: 100%;
+    background-color: gray;
+}
+
+#DefiPageWindow{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    background: rgba(255,255,255,0.80);
+    border: 5px outset black;
+    border-radius: 10px;  
+    width: 25%;
+    height: 25%;
+    z-index: 100;
+}
+
+#NotifDefi{
+    display: inline-flex; 
+    padding: 0px;
+}
+
+#NotifDefi:hover{
+    -webkit-box-shadow: 0px 0px 7px rgba(250,0,0,0.9);
+    box-shadow: 0px 0px 7px rgba(250,0,0,0.9);  
+}

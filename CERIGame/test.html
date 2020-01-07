@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="quizzGame">
+<head>
+
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+    <link rel="shortcut icon" href="/image/favicon.ico">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="app/controllers/controller.js"></script>
+    <script src="app/services/service.js"></script>
+    <script src="app/services/sessionService.js"></script>
+    <script src="app/app.js"></script>
+</head>
+
+<body ng-controller="quizzController">
+
+    <div class="jumbotron text-center" style="margin-bottom:0;">
+        <h2 font="color: white;">CERI GAMES</h2>
+    </div>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" ng-click="toAccueilPage()">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" ng-click="toQuizzPage()">Quizz</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Leaderboard</a>
+                </li>
+            </ul>
+        </div>
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item" ng-show="!isLogged()">
+                    <a class="nav-link" href="#" ng-click="change()">Connexion</a>
+                </li>
+                <li class="nav-item" ng-show="isLogged()">
+                    <a class="nav-link" href="#" ng-click="toProfilPage()">Profil</a>
+                </li>
+                <li class="nav-item" ng-show="isLogged()">
+                    <a class="nav-link" href="#" ng-click="Logout()">Deconnexion</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid" style="margin-top:30px">
+        
+        <div id="bandeaunotif" class="row" style="margin-top: -20px; padding-top: 0">
+            <div class="col-sm-12">
+                <span ng-show="isLogged()">Dernière connexion: {{lastLogging()}}</span>
+                <span style="float: right">{{loginMsg}}</span>
+            </div>
+        </div>
+
+        <div class="row" ng-show="!isLogged()">
+            <div class="col-sm-12">
+                <form ng-submit="Login()">
+                    <h3>Identifiants:</h1>
+                    <input ng-model="iduser" type="text" name="iduser">
+                    <h3>Mot de passe:</h3>
+                    <input ng-model="passwduser" type="password" name="passwduser"></h3><br>
+                    <button class="btn btn-success" type="submit" style="margin-top:20px;">Connexion</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="row" ng-show="accueilPage">
+            <div class="col-sm-12">
+                <h1>Accueil</h1>
+                <p>Bienvenue à l'accueil</p>
+            </div>
+        </div>      
+
+        <div class="row" ng-show="profilPage">
+            <div class="col-sm-12">
+                <h3>Profil</h3>
+                <p>{{getMyId()}}</p>
+                <p>Nom: {{getLastName()}}</p>
+                <p>Prenom: {{getFirstName()}}</p>
+                <p>Date naissance: {{getBirthday()}}</p>
+                <p>Status: {{getStatus()}}</p>
+                <p>Humeur: {{getHumor()}}</p>
+            </div>
+        </div>
+
+        <div class="row" ng-show="quizzPage">
+            <div class="col-sm-12">
+                <h1>QUIZZ</h1>
+            </div>
+        </div>
+
+    </div>
+
+    
+
+</body>
+</html>

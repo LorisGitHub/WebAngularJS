@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="quizzGame">
+<head>
+
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+    <link rel="shortcut icon" href="/image/favicon.ico">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="app/controllers/controller.js"></script>
+    <script src="app/services/sessionService.js"></script>
+    <script src="app/app.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+</head>
+
+<body ng-controller="quizzController" class="img-responsive"> 
+
+    
+    <div class="container-fluid h-100 LoginScreen" style="min-height: 100%; height: 100%;" ng-show="!isLogged()">
+        <div class="row h-100 align-items-center">
+            <div class="col-sm-5"></div>
+            <div class="col-sm-2 align-self-center" id="loginForm">
+                <form class="card card-block" ng-submit="Login()" style="background-color: rgba(0,0,0,0); border-color: transparent;">
+                    <h2 id="FormTitle">Identification</h2>
+                    <span style="font-weight: bold">{{loginMsg}}</span>
+                    <input ng-model="iduser" type="text" name="iduser" placeholder="Identifiant" style="margin-bottom: 15px;"><br>
+                    <input ng-model="passwduser" type="password" name="passwduser" placeholder="Mot de passe" style="margin-bottom: 15px"><br>
+                    <button class="myButton" type="submit">Connexion</button>
+                </form>
+            </div>
+            <div class="col-sm-5"></div>
+        </div>
+    </div>
+
+    <div ng-show="isLogged()">
+
+        <!-- BANDEAU -->
+        <div class="jumbotron text-center" style="margin: 15px; background: rgba(0,0,0,0); padding:20px; display: block ruby;">
+            <!--<img src="image/jean-pierre_mounet.jpg"  width="auto" height="150">-->
+            <h1 style="color: rgb(204, 75, 75); font-family: Verdana; text-shadow:3px 3px 3px #e1e2ed; margin: 2%; font-weight: bold; text-align: center; vertical-align: middle;">CERI GAMES</h1>
+            <img src="image/univ.png" width="auto" height="150px" style="float: right; padding: 20px;">
+            <!--<img src="image/jean-pierre_mounet.jpg" style="vertical-align: middle" width="auto" height="150">-->
+        </div>
+
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark w-100">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+            </button>
+            <div id="navbarNavAltMarkup" class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" ng-click="toAccueilPage()">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" ng-click="getQuizz()">Quizz</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" ng-click="getHistorique()">Historique</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" ng-click="getLeaderboard()">Leaderboard</a>
+                    </li>
+                </ul>
+            </div>
+            <div id="navbarNavAltMarkup" class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item" ng-show="!isLogged()">
+                        <a class="nav-link" href="#" ng-click="change()">Connexion</a>
+                    </li>
+                    <li class="nav-item" ng-show="isLogged()">
+                        <a class="nav-link" href="#" ng-click="toProfilPage()">Profil</a>
+                    </li>
+                    <li class="nav-item" ng-show="isLogged()">
+                        <a class="nav-link" href="#" ng-click="Logout()">Deconnexion</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div ng-show="DefiPage" id="DefiPageWindow">
+            <h1>Defi</h1>
+            <select name="defi" ng-model="defi">
+                <option value ="none">Nothing</option>
+                <option selected="selected" ng-repeat="user in users" value ="{{user}}">{{user.identifiant}}</option>
+            </select> 
+            <button class="btn btn-success" ng-click="StartDefi(defi)">Defier</button>
+            <button class="btn btn-danger" ng-click="CloseDefiPage()">Fermer</button>
+        </div>
+
+        <div ng-show="NotifPage">
+            <h1>Defi de {{NotifDefi.idDefie}}</h1>
+            <h3>Theme: {{NotifDefi.quizz.theme}}</h3>
+            <p> Voulez vous accepter ?</p>
+            <button class="btn btn-success" ng-click="toDefiQuizz(NotifDefi.quizz)">Accepter</button>
+            <button class="btn btn-danger" ng-click="DeleteDefi()">Refuser</button>
+        </div>
+
+        <!-- CONTENT -->
+
+
+        <div class="container-fluid" id="Container">
+
+            <div class="row" style="padding-right: 20px;">
+
+                <div class="col-sm-10" style="padding-left: 25px; padding-right: 10px;">
+                    
+                    <!-- BANDEAU NOTIF -->
+
+                    <div class="row content" id="bandeaunotif">
+                        <div class="col-sm-12">
+                            <span ng-show="isLogged()">Dernière connexion: {{lastLogging() | date:short}}</span>
+                            <span style="float: right">{{loginMsg}}</span>
+                        </div>
+                    </div>
+
+                    <!-- PAGE ACCUEIL -->
+
+                    <div class="row content" ng-show="accueilPage">
+                        <div class="col-sm-12">
+                            <h1>Accueil</h1>
+                            <p>Bienvenue à l'accueil</p>
+                        </div>
+                    </div>      
+
+                    <!-- PAGE PROFIL -->
+
+                    <div class="row content justify-content" ng-show="profilPage">
+                        <div class="col-sm-3 col-content">
+                            <p style="font-weight: bold;">Pseudo: {{getIdentifiant()}}</p>
+                            <p style="font-weight: bold;">Nom: {{getLastName()}}</p>
+                            <p style="font-weight: bold;">Prenom: {{getFirstName()}}</p>
+                            <p style="font-weight: bold;">Date naissance: {{getBirthday() | date:shortDate}}</p>
+                            <p style="font-weight: bold;">Humeur: <input ng-model="HumorField" type="textarea" ng-init="HumorField=getHumor()" value="getHumor()"></p>
+                            <button class="btn btn-primary" ng-click="updateHumor(HumorField)">Update</button>
+                        </div>
+                        <div class="col-sm-4" style="margin-top: 10px;">
+                            <img src="image/theboss.jpeg" style="vertical-align: middle" width="auto" height="175">
+                        </div>
+                    </div>
+
+                    <!-- PAGE QUIZZ -->
+
+                    <div class="row content" ng-show="quizzPage">
+                        <div class="col-sm-12" style="margin:0 auto;">
+                            <ul style="list-style-type: none; padding: 0px;">
+                                <li class="col-sm-3" id="quizzBox" ng-repeat="x in listQuizz" ng-click="openSingleQuizzPage(x)">
+                                    <img id="QuizzImg" src="image/Quizz/{{x.theme}}.jpg" style="border: 5px solid black;">
+                                    <h5 style="color: white; font-weight: bold; position: inherit; bottom: -72%;">{{x.theme}} - {{x.redacteur}}</h3>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- PAGE QUIZZ PREPARATION -->
+
+                    <div class="row content justify-content-sm-center" ng-show="quizzEditPage">
+                        <div class="col-sm-auto">
+                            <div class="special-row">
+                                <h1 style="font-weight: bold">{{singleQuizzData.theme}}</h1>
+                            </div>
+                            <div class="special-row">
+                                <img src="image/Quizz/{{singleQuizzData.theme}}.jpg" style="overflow:hidden; width: -moz-available; margin-bottom: 10px;"><br>
+                            </div>
+                            <div class="special-rowow">
+                                <button class="btn btn-success" name="Facile" ng-model="Difficulte" ng-disabled="facile" style="margin: 5px;" ng-click="DiffChoice('facile')">Facile</button>
+                                <button class="btn btn-warning" name="Intermediaire" ng-model="Difficulte" ng-disabled="moyen" style="margin: 5px;" ng-click="DiffChoice('moyen')">Intermediaire</button>
+                                <button class="btn btn-danger" name="Difficile" ng-model="Difficulte" ng-disabled="dur" style="margin: 5px;" ng-click="DiffChoice('dur')">Difficile</button>
+                            </div>
+                            <div class="special-row">
+                                <select name="nbQuestion" ng-model="nbQuestion" style="margin-bottom: 5px;">
+                                    <option value="" selected disabled hidden>Nombre Question</option>
+                                    <option selected="selected" ng-repeat="x in questionNumber" value="{{x}}">{{x}}</option>
+                                </select>
+                            </div>
+                            <div class="special-row" style="margin-bottom: 10px;">
+                                <button class="btn btn-success" ng-click="initPlay(nbQuestion)" ng-disabled="WaitingSize && WaitingDiff" disabled>Jouer</button>
+                            </div>
+                        </div>
+                        <div ng-show="inDefi" class="col-sm-auto content" style="height: -moz-available">
+                            <h3>En défi</h3>
+                            <p>Defi de: {{NotifDefi.idDefie}}</p>
+                            <p>Score: {{NotifDefi.score}}</p>
+                        </div>
+                    </div>
+
+                    <!-- PAGE QUIZZ JEU -->
+
+                    <div class="row content justify-content-sm-center" ng-show="playingPage">
+                        <div class="col-sm-auto" style="margin: 10px;">
+                            <div class="special-row">
+                                <h1>{{singleQuizzData.theme}}</h1>
+                            </div>
+                            <div class="special-row">
+                                <div id="ProgressBar">
+                                    <div style="height: 25px; background-color: lightseagreen;" ng-style="ProgressBarLength">
+                                        <h4 style="color: whitesmoke; left: 50%; position: absolute;">{{nbParcouru}}/{{nombreQ}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="special-row" style="margin-top: 10px;">
+                                <span>{{theQuestion.question}}</span>
+                            </div>
+                            <div class="special-row">
+                                <button class="myButton" style="margin: 10px;" ng-repeat="reponse in propositions2" ng-disabled="WaitingResponse == false" ng-click="CheckResponse(reponse)" disabled>{{reponse}}</button>
+                            </div>
+                            <div style="margin-bottom: 10px;" class="special-row" ng-show="anecdote">
+                                <span style="font-style: italic;">{{theQuestion.anecdote}}</span>
+                            </div>
+                            <div style="margin-bottom: 10px;" class="special-row" ng-show="resp && !WaitingResponse">
+                                <h3 style="color: green">Vrai !</h3>
+                            </div>
+                            <div style="margin-bottom: 10px;" class="special-row" ng-show="!resp && !WaitingResponse">
+                                <h3 style="color: red">Faux</h3>
+                            </div>
+                            <div class="special-row" ng-show="anecdote && questionLeft">
+                                <button class="btn btn-success" ng-click="play()">Next</button>
+                            </div>
+                            <div class="special-row" ng-show="anecdote && !questionLeft">
+                                <button class="btn btn-success" ng-click="toScorePage()">Finir</button>
+                            </div>
+                        </div>
+                        <div ng-show="inDefi" class="col-sm-auto content" style="height: -moz-available">
+                            <h3>En défi</h3>
+                            <p>Defi de: {{NotifDefi.idDefie}}</p>
+                            <p>Score: {{NotifDefi.score}}</p>
+                        </div>
+                    </div>
+
+                    <!-- PAGE SCORE -->
+
+                    <div class="row content" ng-show="ScorePage">
+                        <div class="col-sm-12">
+                            <div class="special-row">
+                                <h1>{{singleQuizzData.theme}}</h1>
+                            </div>
+                            <div class="special-row" style="overflow: hidden;">
+                                <img src="image/Quizz/{{singleQuizzData.theme}}.jpg" style="width: auto; height: 200px;"><br>
+                            </div>
+                            <div class="special-row">
+                                <h3>Votre score: {{score}}</h3>
+                            </div>
+                            <div class="special-row">
+                                <h3>Votre temps: {{chrono}}s</h3>
+                            </div>
+                            <div class="btn btn-success" ng-click="toDefiPage()">Defier quelqu'un</div>
+                        </div>
+                    </div>
+
+                    <!-- PAGE HISTORIQUE -->
+
+                    <div class="row content text-center" ng-show="HistoriquePage">
+                        <div class="col-sm-12">
+                            <div class="row" style="background-color: gray; margin: 10px; padding: 5px; border-radius: 5px; font-weight: bold;">
+                                <div class="col-sm-2 histoCol">Id</div>
+                                <div class="col-sm-3 histoCol">Date</div>
+                                <div class="col-sm-2 histoCol">Nombre réponse</div>
+                                <div class="col-sm-2 histoCol">Score</div>
+                                <div class="col-sm-2">Temps</div>
+                            </div>
+                            <div class="row" ng-repeat="histRow in Histo" style="margin: 10px; padding: 5px;" ng-style="$index%2 == 0 && {'background-color':'rgba(245, 241, 204, 1)'} || {'background-color': 'rgba(245, 211, 204, 1)'}">
+                                <div class="col-sm-2">{{histRow.id_users}}</div>
+                                <div class="col-sm-3">{{histRow.date | date:short}}</div>
+                                <div class="col-sm-2">{{histRow.nbreponse}}</div>
+                                <div class="col-sm-2">{{histRow.score}}</div>
+                                <div class="col-sm-2">{{histRow.temps}}</div>
+                            </div>
+                            <!-- <div class="" style="align-self: auto;">
+                                <h1>Historique</h1>
+                            </div>
+                            <div class="row" style="margin: 5px; background-color: whitesmoke; margin: 10px; border: 3px solid black ;border-radius: 5px; width: auto; float: left; padding: 10px;" ng-repeat="histRow in Histo">
+                                <span>Date: {{histRow.date | date:short}}<br>NbReponse: {{histRow.nbreponse}}<br>Score: {{histRow.score}}</span>
+                            </div>-->
+                        </div>
+                    </div>
+
+                    <!-- PAGE LEADERBOARD -->
+
+
+                    <div class="row content text-center" ng-show="LeaderBoardPage">
+                        <div class="col-sm-12">
+                            <div class="row" style="background-color: gray; margin: 10px; padding: 5px; border-radius: 5px; font-weight: bold;">
+                                <div class="col-sm-4 histoCol">Rang</div>
+                                <div class="col-sm-4 histoCol">Identifiant</div>
+                                <div class="col-sm-4 histoCol">Score</div>
+                            </div>
+                            <div class="row" ng-repeat="leaderboard in leaderBoard" style="margin: 10px; padding: 5px;" ng-style="$index%2 == 0 && {'background-color':'rgba(245, 241, 204, 1)'} || {'background-color': 'rgba(245, 211, 204, 1)'}">
+                                <div class="col-sm-4">{{$index+1}}</div>
+                                <div class="col-sm-4">{{leaderboard.identifiant}}</div>
+                                <div class="col-sm-4">{{leaderboard.max}}</div>
+                            </div>
+                            <!-- <div class="" style="align-self: auto;">
+                                <h1>Historique</h1>
+                            </div>
+                            <div class="row" style="margin: 5px; background-color: whitesmoke; margin: 10px; border: 3px solid black ;border-radius: 5px; width: auto; float: left; padding: 10px;" ng-repeat="histRow in Histo">
+                                <span>Date: {{histRow.date | date:short}}<br>NbReponse: {{histRow.nbreponse}}<br>Score: {{histRow.score}}</span>
+                            </div>-->
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-2 lateral-content text-center" style="height:auto; left: 10px;">
+
+                    <button class="btn btn-info" ng-click="update()" style="margin: 10px;">Notification</button>
+                    <div style="background-color:azure; height: auto; width: auto; border-bottom: 1px solid white; border-bottom-width: 90%; margin-bottom: 10px;">
+                        <span style="margin-bottom: 10px;">Dernière connexion: {{lastLogging() | date:short}}</span>
+                        <ul style="padding: 0px; margin-top: 10px;">
+                            <div id="NotifDefi" ng-repeat="defi in defis" ng-click="toNotifWindow(defi)" >
+                                <img src="image/notification_important-24px.svg">
+                                <li style="list-style-type: none;">Defi de: {{defi.idDefie}} - Score: {{defi.score}}</li>
+                            </div>
+                        </ul>
+                    </div>
+
+                    <button class="btn btn-info" ng-click="update()" style="margin: 10px;">Utilisateurs</button>
+                    <ul style="padding: 0; margin-bottom: 10px; width: -moz-min-content; align-self: center; margin: auto;">
+                        <div class="itemUsr" ng-click="toDefiPage()" ng-repeat="user in users">
+                            <img src="image/person-24px.svg">
+                            <li>{{user.identifiant}}</li>
+                        </div>
+                    </ul> 
+                    <button class="btn btn-danger" ng-click="DeleteDefi()">Supprimer les defis</button>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    
+
+</body>
+</html>

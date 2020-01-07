@@ -1,0 +1,23 @@
+{
+  "name": "cerigame",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "angular-growl-notifications": "^2.6.0",
+    "body-parser": "^1.19.0",
+    "connect-mongodb-session": "^2.2.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "pg": "^7.14.0",
+    "sha1": "^1.1.1",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
