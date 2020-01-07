@@ -20,7 +20,6 @@ function quizzControl($scope, auth, localStorage, session, quizz, socketIO){
     $scope.iduser = "";
     $scope.passwduser = "";
 
-
     $scope.change = function(){
         if( $scope.logged == true ){
             $scope.id = "";
@@ -541,6 +540,7 @@ function quizzControl($scope, auth, localStorage, session, quizz, socketIO){
     // Met à jour la liste des utilisateurs connectés
     $scope.users;
     socketIO.on("users", function(data){
+        $scope.showWarning();
         $scope.users = data;
         $scope.$apply();
     });
