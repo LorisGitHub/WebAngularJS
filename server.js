@@ -263,7 +263,9 @@ app.post('/uploadScore', function(req, resp){
 
 });
 
-// Initialisation des sockets
+// --------------------------------------------------------------------------
+// ----------------------- Initialisation des sockets -----------------------
+// --------------------------------------------------------------------------
 
 var clientServer = require('socket.io-client').connect("http://pedago01c.univ-avignon.fr:3019/");
 clientServer.once( "connect", function () {
@@ -280,7 +282,7 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('getId', function(data){
         clientId = data;
-        console.log(data);
+        //console.log(data);
     });
 
     setInterval(function(){
@@ -308,18 +310,13 @@ io.sockets.on('connection', function (socket) {
         if(clientId !== null && clientId !== undefined){
             MongoClient.connect("mongodb://localhost:27017/", { useNewUrlParser: true },function (err, db) {
                 var dbo = db.db("db");
-                console.log("je vais chercher les défis de", clientId);
-                dbo.collection("defi").find({idUser: clientId}).toArray(function (err, result) {
+                dbo.collection("defi").find({idDefie: clientId}).toArray(function (err, result) {
                     if (err) throw err;
-                    console.log("trouvé des trucs, taille:", result.length);
                     socket.emit('defi', result);
                 });
             });
         }
     }, 10000);
-
-    //setTimeout(UpdateUserList, 15000);
-
 
     socket.on('deleteDefi', function(data) {
 

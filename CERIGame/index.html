@@ -98,7 +98,7 @@
         </div>
 
         <div ng-show="NotifPage">
-            <h1>Defi de {{NotifDefi.idDefie}}</h1>
+            <h1>Defi de {{NotifDefi.identifiantDefiant}}</h1>
             <h3>Theme: {{NotifDefi.quizz.theme}}</h3>
             <p> Voulez vous accepter ?</p>
             <button class="btn btn-success" ng-click="toDefiQuizz(NotifDefi.quizz)">Accepter</button>
@@ -317,7 +317,7 @@
                         <ul style="padding: 0px; margin-top: 10px;">
                             <div id="NotifDefi" ng-repeat="defi in defis" ng-click="toNotifWindow(defi)" >
                                 <img src="image/notification_important-24px.svg">
-                                <li style="list-style-type: none;">Defi de: {{defi.idDefie}} - Score: {{defi.score}}</li>
+                                <li style="list-style-type: none;">Defi de: {{defi.identifiantDefiant}} - Score: {{defi.score}}</li>
                             </div>
                         </ul>
                     </div>

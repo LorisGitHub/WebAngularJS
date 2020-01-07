@@ -504,8 +504,9 @@ function quizzControl($scope, auth, localStorage, session, quizz, socketIO){
         console.log($scope.currentQuizz);
 
         var defi = {
-            "idUser": $scope.getMyId(),
-            "idDefie": obj[key],
+            "idDefie": $scope.getMyId(),
+            "idDefiant": obj[key],
+            "identifiantDefiant": obj["identifiant"],
             "score": $scope.score,
             "quizz": $scope.currentQuizz,
         };
@@ -513,16 +514,6 @@ function quizzControl($scope, auth, localStorage, session, quizz, socketIO){
         quizz.postDefi(defi);
 
     }
-
-    /*$scope.DeleteDefi = function(){
-
-        var data = {
-            "idUser": $scope.getMyId(),
-        }
-
-        quizz.delDefi(data);
-
-    }*/
 
     $scope.NotifDefi;
 
@@ -550,7 +541,6 @@ function quizzControl($scope, auth, localStorage, session, quizz, socketIO){
     // Met à jour la liste des utilisateurs connectés
     $scope.users;
     socketIO.on("users", function(data){
-        //console.log(data);
         $scope.users = data;
         $scope.$apply();
     });
@@ -559,17 +549,15 @@ function quizzControl($scope, auth, localStorage, session, quizz, socketIO){
         $scope.$apply();
     }
 
+    // Supprime un défi et cache le bandeau de défi
     $scope.DeleteDefi = function(){
-        console.log("Notif envoyé");
-        console.log($scope.NotifDefi._id);
+        $scope.NotifPage = false;
         socketIO.emit("deleteDefi", $scope.NotifDefi._id);
     }
 
     $scope.inDefi = false;
     $scope.toDefiQuizz = function(quizz){
         $scope.inDefi = true;
-        console.log("pt");
-        console.log(quizz);
         $scope.NotifPage = false;
         $scope.openSingleQuizzPage(quizz);
     }
